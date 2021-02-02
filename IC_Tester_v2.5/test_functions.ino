@@ -8,7 +8,8 @@ boolean testCase(String test, int pins)
 {
   // Helper function to perform IC checks
   boolean result = true;
-  int clkPin = -1;
+  int clockPins[20];
+  int clocks = 0;
 
   // Load the hardware pin definition into pin
   switch (pins)
@@ -54,18 +55,20 @@ boolean testCase(String test, int pins)
         break;
       case '1' : pinMode(pin[i], OUTPUT); digitalWrite(pin[i], HIGH);
         break;
-      case 'C' : clkPin = pin[i]; pinMode(pin[i], OUTPUT); digitalWrite(pin[i], LOW);
+      case 'C' : clockPins[clocks++] = pin[i]; pinMode(pin[i], OUTPUT); digitalWrite(pin[i], LOW);
         break;
     }
   }
 
-  if (clkPin != -1)
+  if (clocks)
   {
-    //Clock Trigger
-    pinMode(clkPin, INPUT_PULLUP);
-    delay(10);
-    pinMode(clkPin, OUTPUT);
-    digitalWrite(clkPin, LOW);
+    for (int i = 0; i < clocks; i++) {
+      //Clock Trigger
+      pinMode(clockPins[i], INPUT_PULLUP);
+      delay(10);
+      pinMode(clockPins[i], OUTPUT);
+      digitalWrite(clockPins[i], LOW);
+    }
   }
 
   delay(5);
